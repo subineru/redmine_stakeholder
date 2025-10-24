@@ -1,0 +1,174 @@
+<div class="contextual">
+  <%= link_to l(:label_stakeholder_plural), project_stakeholders_path(@project), class: 'icon icon-list' %>
+</div>
+
+<h2><%= "#{l(:label_stakeholder)}: #{@stakeholder.name}" %></h2>
+
+<div class="history-container">
+  <div class="box history-info">
+    <h3><%=l(:label_change_history)%></h3>
+
+    <% if @stakeholder_histories.any? %>
+      <table class="list history">
+        <thead>
+          <tr>
+            <th><%=l(:label_date)%></th>
+            <th><%=l(:label_user)%></th>
+            <th><%=l(:label_action)%></th>
+            <th><%=l(:label_field)%></th>
+            <th><%=l(:label_old_value)%></th>
+            <th><%=l(:label_new_value)%></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @stakeholder_histories.each do |history| %>
+            <tr class="history <%= history.action %>">
+              <td class="date">
+                <span title="<%= format_time(history.created_at) %>">
+                  <%= history.created_at.strftime('%Y-%m-%d') %>
+                </span>
+              </td>
+              <td class="user"><%=h history.user_name %></td>
+              <td class="action">
+                <span class="action-label <%= "action-#{history.action}" %>">
+                  <%=h history.action_label %>
+                </span>
+              </td>
+              <td class="field">
+                <% if history.update_action? %>
+                  <%=h history.field_label %>
+                <% else %>
+                  -
+                <% end %>
+              </td>
+              <td class="old-value">
+                <% if history.update_action? && history.old_value.present? %>
+                  <code><%=h history.old_value %></code>
+                <% else %>
+                  -
+                <% end %>
+              </td>
+              <td class="new-value">
+                <% if history.update_action? && history.new_value.present? %>
+                  <code><%=h history.new_value %></code>
+                <% elsif history.create_action? %>
+                  <%=l(:label_created)%>
+                <% elsif history.delete_action? %>
+                  <%=l(:label_deleted)%>
+                <% else %>
+                  -
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p class="nodata"><%=l(:label_no_change_history)%></p>
+    <% end %>
+  </div>
+</div>
+
+<style>
+  .history-container {
+    margin-top: 20px;
+  }
+
+  .history-info {
+    padding: 15px;
+  }
+
+  .history-info h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #17a2b8;
+    padding-bottom: 10px;
+  }
+
+  table.history {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  table.history thead tr {
+    background-color: #f5f5f5;
+  }
+
+  table.history th {
+    padding: 10px;
+    text-align: left;
+    font-weight: bold;
+    border: 1px solid #ddd;
+  }
+
+  table.history td {
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+
+  table.history tbody tr:nth-child(odd) {
+    background-color: #fafafa;
+  }
+
+  table.history tbody tr:hover {
+    background-color: #f0f0f0;
+  }
+
+  table.history td.date {
+    white-space: nowrap;
+    color: #666;
+    font-size: 0.9em;
+  }
+
+  table.history td.user {
+    font-weight: 500;
+  }
+
+  table.history td.action .action-label {
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 0.85em;
+    font-weight: bold;
+  }
+
+  table.history td.action .action-create {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  table.history td.action .action-update {
+    background-color: #cfe2ff;
+    color: #084298;
+  }
+
+  table.history td.action .action-delete {
+    background-color: #f8d7da;
+    color: #842029;
+  }
+
+  table.history td code {
+    background-color: #f5f5f5;
+    padding: 2px 5px;
+    border-radius: 2px;
+    font-family: monospace;
+    color: #d63384;
+  }
+
+  /* 響應式設計 */
+  @media screen and (max-width: 768px) {
+    table.history {
+      font-size: 0.9em;
+    }
+
+    table.history th,
+    table.history td {
+      padding: 8px 5px;
+    }
+
+    table.history td.old-value,
+    table.history td.new-value {
+      max-width: 150px;
+      word-break: break-word;
+    }
+  }
+</style>

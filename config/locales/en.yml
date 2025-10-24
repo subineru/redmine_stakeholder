@@ -1,0 +1,128 @@
+en:
+  # Labels
+  label_stakeholder: "Stakeholder"
+  label_stakeholder_plural: "Stakeholders"
+  label_stakeholder_new: "New Stakeholder"
+  label_stakeholder_edit: "Edit Stakeholder"
+  label_stakeholder_analytics: "Analytics"
+  label_no_data: "No data to display"
+  label_export_csv: "Export CSV"
+  label_export_excel: "Export Excel"
+  label_summary_statistics: "Summary Statistics"
+  label_total_stakeholders: "Total Stakeholders"
+  label_unique_impact_phases: "Unique Impact Phases"
+  label_with_requirements: "With Requirements"
+  label_with_expectations: "With Expectations"
+  label_support_level_distribution: "Support Level Distribution"
+  label_impact_phase_distribution: "Impact Phase Distribution"
+  label_count: "Count"
+  label_percentage: "Percentage"
+  label_not_specified: "Not Specified"
+
+  # Power-Interest Matrix
+  label_power_interest_matrix: "Power-Interest Matrix"
+  label_stakeholder_matrix_chart: "Stakeholder Matrix Chart"
+  label_quadrants_summary: "Quadrants Summary"
+  label_power_level: "Power Level"
+  label_interest_level: "Interest Level"
+  label_power: "Power"
+  label_interest: "Interest"
+  label_key_players: "Key Players"
+  label_manage_closely: "Manage Closely"
+  label_keep_satisfied: "Keep Satisfied"
+  label_keep_informed: "Keep Informed"
+  label_minimal_effort: "Minimal Effort"
+  label_monitor: "Monitor"
+  label_no_stakeholders: "No stakeholders"
+  label_no_data_for_matrix: "Not enough data to display the matrix. Please set power and interest levels for stakeholders."
+  label_select_power_level: "-- Select Power Level --"
+  label_select_interest_level: "-- Select Interest Level --"
+  label_select_location_type: "-- Select Internal/External --"
+  label_select_influence_attitude: "-- Select Influence/Attitude --"
+  label_internal_stakeholders: "Internal Stakeholders"
+  label_external_stakeholders: "External Stakeholders"
+  label_influence_attitude_distribution: "Influence/Attitude Distribution"
+  label_location_type_distribution: "Internal/External Distribution"
+
+  # Fields
+  field_id: "ID"
+  field_stakeholder_name: "Name"
+  field_title: "Title"
+  field_location_type: "Internal/External"
+  field_project_role: "Project Role"
+  field_primary_needs: "Primary Needs"
+  field_expectations: "Expectations"
+  field_influence_attitude: "Influence/Attitude"
+  field_impact_phase: "Impact Phase"
+  field_requirements: "Requirements"
+  field_support_level: "Support Level"
+  field_power_level: "Power Level"
+  field_interest_level: "Interest Level"
+
+  # Buttons (using Redmine standard translation keys)
+  button_edit: "Edit"
+  button_delete: "Delete"
+  button_create: "Create"
+  button_save: "Save"
+  button_cancel: "Cancel"
+
+  # Text
+  text_are_you_sure: "Are you sure?"
+  text_matrix_description: "The Power-Interest Matrix is a tool for analyzing stakeholders, helping you identify which stakeholders require priority attention."
+  text_power_level_desc: "Stakeholder's ability to influence project decisions (1=Lowest, 5=Highest)"
+  text_interest_level_desc: "Stakeholder's level of interest in the project (1=Lowest, 5=Highest)"
+  text_power_level_hint: "1=Lowest, 5=Highest"
+  text_interest_level_hint: "1=Lowest, 5=Highest"
+  text_key_players_desc: "High Power, High Interest - Manage closely and keep satisfied"
+  text_keep_satisfied_desc: "High Power, Low Interest - Keep satisfied but don't over-communicate"
+  text_keep_informed_desc: "Low Power, High Interest - Keep fully informed and consult"
+  text_minimal_effort_desc: "Low Power, Low Interest - Monitor but don't invest excessive resources"
+
+  # Stakeholder options
+  stakeholder:
+    location_type:
+      internal: "Internal"
+      external: "External"
+    influence_attitude:
+      completely_unaware: "Completely Unaware"
+      resistant: "Resistant"
+      neutral: "Neutral"
+      supportive: "Supportive"
+      leading: "Leading"
+    support_level:
+      strong_support: "Strong Support"
+      support: "Support"
+      neutral: "Neutral"
+      oppose: "Oppose"
+      strong_oppose: "Strong Oppose"
+
+  # Permissions
+  permission_view_stakeholders: "View stakeholders"
+  permission_manage_stakeholders: "Manage stakeholders"
+
+  # Module
+  project_module_stakeholders: "Stakeholders"
+
+  # Notices (using Redmine standard translation keys)
+  notice_successful_create: "Successfully created."
+  notice_successful_update: "Successfully updated."
+  notice_successful_delete: "Successfully deleted."
+
+  # Change History
+  label_change_history: "Change History"
+  label_date: "Date"
+  label_user: "User"
+  label_action: "Action"
+  label_field: "Field"
+  label_old_value: "Old Value"
+  label_new_value: "New Value"
+  label_created: "Created"
+  label_deleted: "Deleted"
+  label_no_change_history: "No change history available"
+
+  # History actions
+  stakeholder_history:
+    action:
+      create: "Created"
+      update: "Modified"
+      delete: "Deleted"

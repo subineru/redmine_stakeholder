@@ -1,0 +1,53 @@
+<div class="contextual">
+  <%= link_to l(:button_edit),
+              edit_project_stakeholder_path(@project, @stakeholder),
+              class: 'icon icon-edit' if User.current.allowed_to?(:manage_stakeholders, @project) %>
+  <%= link_to l(:label_change_history),
+              history_project_stakeholder_path(@project, @stakeholder),
+              class: 'icon icon-history' if User.current.allowed_to?(:view_stakeholders, @project) %>
+  <%= link_to l(:button_delete),
+              project_stakeholder_path(@project, @stakeholder),
+              method: :delete,
+              data: { confirm: l(:text_are_you_sure) },
+              class: 'icon icon-del' if User.current.allowed_to?(:manage_stakeholders, @project) %>
+</div>
+
+<h2><%=l(:label_stakeholder)%>: <%= @stakeholder.name %></h2>
+
+<div class="stakeholder-details">
+  <div class="splitcontentleft">
+    <p>
+      <strong><%=l(:field_id)%>:</strong>
+      <%= @stakeholder.id %>
+    </p>
+    <p>
+      <strong><%=l(:field_stakeholder_name)%>:</strong>
+      <%= @stakeholder.name %>
+    </p>
+    <p>
+      <strong><%=l(:field_impact_phase)%>:</strong>
+      <%= @stakeholder.impact_phase %>
+    </p>
+    <p>
+      <strong><%=l(:field_support_level)%>:</strong>
+      <%= support_level_badge(@stakeholder.support_level) %>
+    </p>
+  </div>
+
+  <div class="splitcontentright">
+    <p>
+      <strong><%=l(:field_requirements)%>:</strong>
+      <%= simple_format(@stakeholder.requirements) %>
+    </p>
+    <p>
+      <strong><%=l(:field_expectations)%>:</strong>
+      <%= simple_format(@stakeholder.expectations) %>
+    </p>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<p>
+  <%= link_to l(:label_stakeholder_plural), project_stakeholders_path(@project) %>
+</p>

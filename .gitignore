@@ -1,0 +1,21 @@
+# Project-specific files (不要提交到版本控制)
+CLAUDE.md
+todolist.md
+pic/
+pic/**/*
+
+# Log files
+*.log
+log/
+*.log.*
+
+# Ruby gems and bundler
+.bundle/
+/vendor/bundle/
+/vendor/gems/
+Gemfile.lock
+
+# Node modules (if using Webpack)
+node_modules/
+/public/assets/
+/public/packs/

@@ -1,0 +1,128 @@
+zh-TW:
+  # Labels
+  label_stakeholder: "利害關係人"
+  label_stakeholder_plural: "利害關係人登錄表"
+  label_stakeholder_new: "新增利害關係人"
+  label_stakeholder_edit: "編輯利害關係人"
+  label_stakeholder_analytics: "分析圖表"
+  label_no_data: "沒有資料"
+  label_export_csv: "匯出 CSV"
+  label_export_excel: "匯出 Excel"
+  label_summary_statistics: "統計摘要"
+  label_total_stakeholders: "利害關係人總數"
+  label_unique_impact_phases: "影響階段數量"
+  label_with_requirements: "已填寫需求"
+  label_with_expectations: "已填寫期望"
+  label_support_level_distribution: "支持程度分布"
+  label_impact_phase_distribution: "影響階段分布"
+  label_count: "數量"
+  label_percentage: "百分比"
+  label_not_specified: "未指定"
+
+  # Power-Interest Matrix
+  label_power_interest_matrix: "權力與關切矩陣"
+  label_stakeholder_matrix_chart: "利害關係人矩陣圖"
+  label_quadrants_summary: "象限摘要"
+  label_power_level: "權力程度"
+  label_interest_level: "關切程度"
+  label_power: "權力"
+  label_interest: "關切"
+  label_key_players: "關鍵角色"
+  label_manage_closely: "密切管理"
+  label_keep_satisfied: "保持滿意"
+  label_keep_informed: "保持消息靈通"
+  label_minimal_effort: "最小努力"
+  label_monitor: "監視者"
+  label_no_stakeholders: "無利害關係人"
+  label_no_data_for_matrix: "沒有足夠的資料來顯示矩陣。請為利害關係人設定權力和關切程度。"
+  label_select_power_level: "-- 選擇權力程度 --"
+  label_select_interest_level: "-- 選擇關切程度 --"
+  label_select_location_type: "-- 選擇內部/外部 --"
+  label_select_influence_attitude: "-- 選擇影響/態度 --"
+  label_internal_stakeholders: "內部利害關係人"
+  label_external_stakeholders: "外部利害關係人"
+  label_influence_attitude_distribution: "影響/態度分布"
+  label_location_type_distribution: "內部/外部分布"
+
+  # Fields
+  field_id: "編號"
+  field_stakeholder_name: "姓名"
+  field_title: "職稱"
+  field_location_type: "內部/外部"
+  field_project_role: "專案角色"
+  field_primary_needs: "主要需求"
+  field_expectations: "期望"
+  field_influence_attitude: "影響/態度"
+  field_impact_phase: "影響階段"
+  field_requirements: "需求"
+  field_support_level: "支持程度"
+  field_power_level: "權力程度"
+  field_interest_level: "關切程度"
+
+  # Buttons (使用 Redmine 標準翻譯鍵)
+  button_edit: "編輯"
+  button_delete: "刪除"
+  button_create: "新建"
+  button_save: "儲存"
+  button_cancel: "取消"
+
+  # Text
+  text_are_you_sure: "您確定嗎？"
+  text_matrix_description: "權力與關切矩陣是一個用於分析利害關係人的工具，幫助您識別哪些利害關係人需要優先關注。"
+  text_power_level_desc: "利害關係人影響專案決策的能力（1=最低, 5=最高）"
+  text_interest_level_desc: "利害關係人對專案的關切程度（1=最低, 5=最高）"
+  text_power_level_hint: "1=最低, 5=最高"
+  text_interest_level_hint: "1=最低, 5=最高"
+  text_key_players_desc: "高權力、高關切 - 密切管理並保持滿意"
+  text_keep_satisfied_desc: "高權力、低關切 - 保持滿意但不過度溝通"
+  text_keep_informed_desc: "低權力、高關切 - 充分告知並諮詢意見"
+  text_minimal_effort_desc: "低權力、低關切 - 監控但不過度投入資源"
+
+  # Stakeholder options
+  stakeholder:
+    location_type:
+      internal: "內部"
+      external: "外部"
+    influence_attitude:
+      completely_unaware: "完全不覺"
+      resistant: "抵制"
+      neutral: "中立"
+      supportive: "支持"
+      leading: "領導"
+    support_level:
+      strong_support: "強力支持"
+      support: "支持"
+      neutral: "中立"
+      oppose: "反對"
+      strong_oppose: "強力反對"
+
+  # Permissions
+  permission_view_stakeholders: "查看利害關係人"
+  permission_manage_stakeholders: "管理利害關係人"
+
+  # Module
+  project_module_stakeholders: "利害關係人"
+
+  # Notices (使用 Redmine 標準翻譯鍵)
+  notice_successful_create: "新建成功。"
+  notice_successful_update: "更新成功。"
+  notice_successful_delete: "刪除成功。"
+
+  # Change History (變更歷史記錄)
+  label_change_history: "變更歷史記錄"
+  label_date: "日期"
+  label_user: "用戶"
+  label_action: "操作"
+  label_field: "欄位"
+  label_old_value: "修改前"
+  label_new_value: "修改後"
+  label_created: "已新建"
+  label_deleted: "已刪除"
+  label_no_change_history: "沒有變更歷史記錄"
+
+  # History actions (歷史記錄操作類型)
+  stakeholder_history:
+    action:
+      create: "新增"
+      update: "修改"
+      delete: "刪除"

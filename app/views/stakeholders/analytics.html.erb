@@ -1,0 +1,182 @@
+<div class="contextual">
+  <%= link_to l(:label_stakeholder_plural), project_stakeholders_path(@project), class: 'icon icon-list' %>
+</div>
+
+<h2><%=l(:label_stakeholder_analytics)%></h2>
+
+<div class="analytics-container">
+  <!-- Summary Statistics -->
+  <div class="box analytics-summary">
+    <h3><%=l(:label_summary_statistics)%></h3>
+    <div class="splitcontentleft">
+      <p>
+        <strong><%=l(:label_total_stakeholders)%>:</strong>
+        <%= @total_count %>
+      </p>
+      <p>
+        <strong><%=l(:label_internal_stakeholders)%>:</strong>
+        <%= @location_type_stats['internal'] || 0 %>
+      </p>
+    </div>
+    <div class="splitcontentright">
+      <p>
+        <strong><%=l(:label_external_stakeholders)%>:</strong>
+        <%= @location_type_stats['external'] || 0 %>
+      </p>
+      <p>
+        <strong><%=l(:label_with_expectations)%>:</strong>
+        <%= @stakeholders.where.not(expectations: [nil, '']).count %>
+      </p>
+    </div>
+    <div class="clear"></div>
+  </div>
+
+  <!-- Influence/Attitude Chart -->
+  <div class="box analytics-chart">
+    <h3><%=l(:label_influence_attitude_distribution)%></h3>
+    <div class="chart-container">
+      <canvas id="influenceAttitudeChart" width="400" height="300"></canvas>
+    </div>
+    <div class="chart-legend">
+      <table class="list">
+        <thead>
+          <tr>
+            <th><%=l(:field_influence_attitude)%></th>
+            <th><%=l(:label_count)%></th>
+            <th><%=l(:label_percentage)%></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @influence_attitude_data.each do |data| %>
+            <% next if data[:value] == 0 %>
+            <tr>
+              <td><%= data[:label] %></td>
+              <td><%= data[:value] %></td>
+              <td><%= number_to_percentage((data[:value].to_f / @total_count * 100), precision: 1) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Location Type Chart -->
+  <div class="box analytics-chart">
+    <h3><%=l(:label_location_type_distribution)%></h3>
+    <div class="chart-container">
+      <canvas id="locationTypeChart" width="400" height="300"></canvas>
+    </div>
+    <div class="chart-legend">
+      <table class="list">
+        <thead>
+          <tr>
+            <th><%=l(:field_location_type)%></th>
+            <th><%=l(:label_count)%></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @location_type_stats.sort_by { |k, v| -v }.each do |type, count| %>
+            <% next if type.blank? %>
+            <tr>
+              <td><%= I18n.t("stakeholder.location_type.#{type}", default: type) %></td>
+              <td><%= count %></td>
+            </tr>
+          <% end %>
+          <% if @location_type_stats[nil] || @location_type_stats[''] %>
+            <tr>
+              <td><em><%=l(:label_not_specified)%></em></td>
+              <td><%= (@location_type_stats[nil] || 0) + (@location_type_stats[''] || 0) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Influence/Attitude Chart Data
+    var influenceAttitudeData = <%= raw @influence_attitude_data.to_json %>;
+    var influenceAttitudeLabels = influenceAttitudeData.map(function(d) { return d.label; });
+    var influenceAttitudeValues = influenceAttitudeData.map(function(d) { return d.value; });
+
+    // Location Type Chart Data
+    var locationTypeData = <%= raw @location_type_stats.reject { |k, v| k.blank? }.to_json %>;
+    var locationTypeLabels = Object.keys(locationTypeData).map(function(type) {
+      return type === 'internal' ? '<%=I18n.t("stakeholder.location_type.internal")%>' : '<%=I18n.t("stakeholder.location_type.external")%>';
+    });
+    var locationTypeValues = Object.values(locationTypeData);
+
+    // Color palette for influence/attitude
+    var influenceColors = [
+      '#dc3545', // red - completely unaware
+      '#ffc107', // yellow - resistant
+      '#6c757d', // gray - neutral
+      '#17a2b8', // blue - supportive
+      '#28a745'  // green - leading
+    ];
+
+    // Initialize Influence/Attitude Chart (Pie Chart)
+    if (document.getElementById('influenceAttitudeChart')) {
+      var ctx1 = document.getElementById('influenceAttitudeChart').getContext('2d');
+      new Chart(ctx1, {
+        type: 'pie',
+        data: {
+          labels: influenceAttitudeLabels,
+          datasets: [{
+            data: influenceAttitudeValues,
+            backgroundColor: influenceColors,
+            borderWidth: 2,
+            borderColor: '#fff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'bottom'
+            }
+          }
+        }
+      });
+    }
+
+    // Initialize Location Type Chart (Bar Chart)
+    if (document.getElementById('locationTypeChart')) {
+      var ctx2 = document.getElementById('locationTypeChart').getContext('2d');
+      new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: locationTypeLabels,
+          datasets: [{
+            label: '<%=l(:label_count)%>',
+            data: locationTypeValues,
+            backgroundColor: '#17a2b8',
+            borderColor: '#138496',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            }
+          }
+        }
+      });
+    }
+  });
+<% end %>

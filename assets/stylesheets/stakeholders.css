@@ -1,0 +1,310 @@
+/* Stakeholder Plugin Styles - Responsive Design */
+
+.stakeholders-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table.stakeholders {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.stakeholders th,
+table.stakeholders td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+table.stakeholders th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+table.stakeholders tr.odd {
+  background-color: #fff;
+}
+
+table.stakeholders tr.even {
+  background-color: #f9f9f9;
+}
+
+table.stakeholders tr:hover {
+  background-color: #e8f4ff;
+}
+
+table.stakeholders td.id {
+  width: 50px;
+  text-align: center;
+}
+
+table.stakeholders td.name {
+  min-width: 150px;
+}
+
+table.stakeholders td.impact-phase {
+  min-width: 120px;
+}
+
+table.stakeholders td.requirements,
+table.stakeholders td.expectations {
+  min-width: 150px;
+  max-width: 250px;
+}
+
+table.stakeholders td.support-level {
+  min-width: 100px;
+}
+
+table.stakeholders td.buttons {
+  white-space: nowrap;
+  text-align: right;
+  width: 80px;
+}
+
+/* Badge styles for support levels */
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 0.85em;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.badge-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge-info {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.badge-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.badge-warning {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.badge-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Stakeholder details page */
+.stakeholder-details {
+  margin-top: 20px;
+}
+
+.stakeholder-details p {
+  margin-bottom: 15px;
+}
+
+.stakeholder-details strong {
+  display: inline-block;
+  min-width: 120px;
+}
+
+/* Form styles */
+.stakeholder-form .box.tabular p {
+  margin-bottom: 15px;
+}
+
+.stakeholder-form .wiki-edit {
+  width: 100%;
+  font-family: monospace;
+}
+
+/* Responsive design for mobile devices */
+@media screen and (max-width: 768px) {
+  table.stakeholders thead {
+    display: none;
+  }
+
+  table.stakeholders tr {
+    display: block;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  table.stakeholders td {
+    display: block;
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+  }
+
+  table.stakeholders td:last-child {
+    border-bottom: none;
+  }
+
+  table.stakeholders td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: inline-block;
+    width: 120px;
+  }
+
+  table.stakeholders td.id::before {
+    content: "ID: ";
+  }
+
+  table.stakeholders td.name::before {
+    content: "利害關係人: ";
+  }
+
+  table.stakeholders td.impact-phase::before {
+    content: "影響階段: ";
+  }
+
+  table.stakeholders td.requirements::before {
+    content: "需求: ";
+  }
+
+  table.stakeholders td.expectations::before {
+    content: "期望: ";
+  }
+
+  table.stakeholders td.support-level::before {
+    content: "支持程度: ";
+  }
+
+  table.stakeholders td.buttons {
+    text-align: left;
+  }
+
+  table.stakeholders td.buttons::before {
+    content: "操作: ";
+  }
+
+  .splitcontentleft,
+  .splitcontentright {
+    width: 100%;
+    float: none;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .stakeholder-form input[type="text"],
+  .stakeholder-form select,
+  .stakeholder-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .contextual {
+    float: none;
+    text-align: left;
+    margin-bottom: 10px;
+  }
+}
+
+/* Tablet responsive */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  table.stakeholders td.requirements,
+  table.stakeholders td.expectations {
+    max-width: 180px;
+  }
+}
+
+/* Analytics page styles */
+.analytics-container {
+  margin-top: 20px;
+}
+
+.analytics-container .box {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+.analytics-container h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #17a2b8;
+  color: #333;
+}
+
+.analytics-summary {
+  background-color: #f9f9f9;
+}
+
+.analytics-summary p {
+  margin: 10px 0;
+  font-size: 1.1em;
+}
+
+.analytics-summary strong {
+  display: inline-block;
+  min-width: 180px;
+  color: #555;
+}
+
+.analytics-chart {
+  overflow: hidden;
+}
+
+.chart-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fafafa;
+  border-radius: 4px;
+}
+
+.chart-container canvas {
+  max-height: 400px;
+}
+
+.chart-legend {
+  margin-top: 20px;
+}
+
+.chart-legend table {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.chart-legend th {
+  background-color: #f5f5f5;
+  padding: 8px;
+  text-align: left;
+}
+
+.chart-legend td {
+  padding: 8px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Responsive analytics */
+@media screen and (max-width: 768px) {
+  .analytics-container .splitcontentleft,
+  .analytics-container .splitcontentright {
+    width: 100%;
+    float: none;
+  }
+
+  .chart-container {
+    padding: 10px;
+  }
+
+  .analytics-summary strong {
+    display: block;
+    min-width: auto;
+    margin-bottom: 5px;
+  }
+}

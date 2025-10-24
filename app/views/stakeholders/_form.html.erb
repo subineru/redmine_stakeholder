@@ -1,0 +1,31 @@
+<%= error_messages_for 'stakeholder' %>
+
+<div class="box tabular">
+  <p>
+    <%= f.text_field :name, required: true, size: 60, label: l(:field_stakeholder_name) %>
+  </p>
+  <p>
+    <%= f.text_field :title, size: 60, label: l(:field_title) %>
+  </p>
+  <p>
+    <%= f.select :location_type,
+                 Stakeholder.location_type_options,
+                 { include_blank: l(:label_select_location_type) },
+                 { class: 'location-type-select' } %>
+  </p>
+  <p>
+    <%= f.text_field :project_role, size: 60, label: l(:field_project_role) %>
+  </p>
+  <p>
+    <%= f.text_area :primary_needs, rows: 5, class: 'wiki-edit', label: l(:field_primary_needs) %>
+  </p>
+  <p>
+    <%= f.text_area :expectations, rows: 5, class: 'wiki-edit', label: l(:field_expectations) %>
+  </p>
+  <p>
+    <%= f.select :influence_attitude,
+                 Stakeholder.influence_attitude_options,
+                 { include_blank: l(:label_select_influence_attitude) },
+                 { class: 'influence-attitude-select' } %>
+  </p>
+</div>
