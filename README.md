@@ -33,6 +33,14 @@
 - 作為專案頁面中的專用標籤集成
 - 基於權限的訪問控制（查看利害關係人 / 管理利害關係人）
 
+### 系統畫面
+
+#### 利害關係人列表
+![Stakeholder List](image/1.png)
+
+#### 變更歷史記錄
+![Change History](image/2.png)
+
 ### 安裝
 
 1. 將此插件複製到您的 Redmine `plugins` 目錄：

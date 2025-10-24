@@ -33,6 +33,14 @@ A comprehensive Redmine plugin for managing and analyzing project stakeholders w
 - Integrated as a dedicated tab in project pages
 - Permission-based access control (view_stakeholders / manage_stakeholders)
 
+### System Screenshots
+
+#### Stakeholder List
+![Stakeholder List](image/1.png)
+
+#### Change History Records
+![Change History](image/2.png)
+
 ### Installation
 
 1. Copy this plugin to your Redmine `plugins` directory:
