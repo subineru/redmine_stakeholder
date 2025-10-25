@@ -1,6 +1,6 @@
 ## Redmine Stakeholder Plugin
 
-A comprehensive Redmine plugin for managing and analyzing project stakeholders with advanced visualization and export capabilities.
+A comprehensive Redmine plugin for managing and analyzing project stakeholders with advanced Power-Interest Matrix visualization, analytics dashboard, and export capabilities.
 
 ### Features
 
@@ -9,13 +9,25 @@ A comprehensive Redmine plugin for managing and analyzing project stakeholders w
 - **Inline Editing**: Edit stakeholder data directly in the list view with hover-activated pencil icons
 - **Change History Tracking**: Comprehensive audit trail of all stakeholder modifications (create, update, delete)
 - **Comprehensive Stakeholder Tracking**:
-  - Stakeholder name
-  - Title
+  - Stakeholder name, title
   - Internal/External location type
-  - Project role
-  - Primary needs
-  - Expectations
-  - Influence/Attitude level (Completely Unaware / Resistant / Neutral / Supportive / Leading)
+  - Project role, primary needs, expectations
+  - **Power level** (1-5 scale: from almost no impact to direct influence over decisions)
+  - **Interest level** (1-5 scale: from almost no concern to extreme concern)
+  - **Participation degree** (Completely Unaware / Resistant / Neutral / Supportive / Leading)
+
+#### Stakeholder Analysis
+- **Power-Interest Matrix** - Classic four-quadrant analysis for stakeholder management
+  - Q1 Manage Closely (High Power + High Interest)
+  - Q2 Keep Satisfied (High Power + Low Interest)
+  - Q3 Keep Informed (Low Power + High Interest)
+  - Q4 Monitor (Low Power + Low Interest)
+- **Interactive Scatter Plot** - Visualize stakeholder positions in the matrix with automatic circle overlap resolution
+- **Analytics Dashboard** - Multi-dimensional statistics and analysis
+  - Summary statistics (count of internal/external stakeholders, expectations filled, etc.)
+  - Participation degree distribution chart
+  - Internal/External distribution statistics
+- **Smart Collision Detection** - Automatically disperses stakeholders with duplicate coordinates for clear visualization
 
 #### Data Export
 - **CSV Export**: Export all stakeholder data to CSV format with UTF-8 encoding
@@ -36,9 +48,13 @@ A comprehensive Redmine plugin for managing and analyzing project stakeholders w
 ### System Screenshots
 
 #### Stakeholder List
+![Stakeholder Icon](image/icon-stakeholder.svg)
+
 ![Stakeholder List](image/1.png)
 
 #### Change History Records
+![Change History Icon](image/icon-history.svg)
+
 ![Change History](image/2.png)
 
 ### Installation
@@ -100,7 +116,9 @@ The plugin creates two tables:
 - `project_role` (string): Role in the project
 - `primary_needs` (text): Stakeholder primary needs
 - `expectations` (text): Stakeholder expectations
-- `influence_attitude` (string): Influence/Attitude level
+- `power` (integer): Power level (1-5)
+- `interest` (integer): Interest level (1-5)
+- `participation_degree` (string): Participation degree (completely_unaware / resistant / neutral / supportive / leading)
 - `position` (integer): Display order
 
 **stakeholder_histories table**:

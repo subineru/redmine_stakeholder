@@ -1,0 +1,29 @@
+<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="128" cy="128" r="120" fill="#4A90E2" opacity="0.1"/>
+
+  <!-- Multiple users representing stakeholders -->
+  <!-- User 1 (left) -->
+  <circle cx="85" cy="70" r="18" fill="#4A90E2"/>
+  <path d="M 65 110 Q 65 100 75 100 L 95 100 Q 105 100 105 110 L 105 130 L 65 130 Z" fill="#4A90E2"/>
+
+  <!-- User 2 (center) -->
+  <circle cx="128" cy="65" r="20" fill="#2E5C8A"/>
+  <path d="M 105 110 Q 105 98 118 98 L 138 98 Q 151 98 151 110 L 151 135 L 105 135 Z" fill="#2E5C8A"/>
+
+  <!-- User 3 (right) -->
+  <circle cx="171" cy="70" r="18" fill="#4A90E2"/>
+  <path d="M 151 110 Q 151 100 161 100 L 181 100 Q 191 100 191 110 L 191 130 L 151 130 Z" fill="#4A90E2"/>
+
+  <!-- Connection lines representing relationships -->
+  <line x1="85" y1="90" x2="128" y2="85" stroke="#4A90E2" stroke-width="2" opacity="0.5"/>
+  <line x1="171" y1="90" x2="128" y2="85" stroke="#4A90E2" stroke-width="2" opacity="0.5"/>
+  <line x1="85" y1="130" x2="171" y2="130" stroke="#4A90E2" stroke-width="2" opacity="0.5"/>
+
+  <!-- Checkmark or connection indicator at bottom -->
+  <circle cx="128" cy="180" r="25" fill="#50C878" opacity="0.2"/>
+  <path d="M 118 180 L 124 186 L 138 172" stroke="#50C878" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Title text -->
+  <text x="128" y="235" font-size="16" font-weight="bold" text-anchor="middle" fill="#2E5C8A">Stakeholder</text>
+</svg>

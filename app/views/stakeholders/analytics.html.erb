@@ -18,7 +18,7 @@
         <%= @location_type_stats['internal'] || 0 %>
       </p>
     </div>
-    <div class="splitcontentright">
+    <div class="splitcontentleft">
       <p>
         <strong><%=l(:label_external_stakeholders)%>:</strong>
         <%= @location_type_stats['external'] || 0 %>
@@ -31,39 +31,93 @@
     <div class="clear"></div>
   </div>
 
-  <!-- Influence/Attitude Chart -->
-  <div class="box analytics-chart">
-    <h3><%=l(:label_influence_attitude_distribution)%></h3>
-    <div class="chart-container">
-      <canvas id="influenceAttitudeChart" width="400" height="300"></canvas>
-    </div>
-    <div class="chart-legend">
-      <table class="list">
-        <thead>
-          <tr>
-            <th><%=l(:field_influence_attitude)%></th>
-            <th><%=l(:label_count)%></th>
-            <th><%=l(:label_percentage)%></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @influence_attitude_data.each do |data| %>
-            <% next if data[:value] == 0 %>
+  <!-- Two-Column Layout: Power-Interest Matrix (Left) + Participation Degree (Right) -->
+  <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+    <!-- Left Column: Power-Interest Matrix -->
+    <div class="box analytics-chart" style="flex: 1;">
+      <h3><%=l(:label_power_interest_matrix)%></h3>
+      <div class="chart-container" style="height: 400px;">
+        <canvas id="powerInterestMatrix" width="400" height="400"></canvas>
+      </div>
+      <div class="matrix-legend" style="margin-top: 15px; font-size: 12px;">
+        <table class="list" style="font-size: 11px;">
+          <thead>
             <tr>
-              <td><%= data[:label] %></td>
-              <td><%= data[:value] %></td>
-              <td><%= number_to_percentage((data[:value].to_f / @total_count * 100), precision: 1) %></td>
+              <th><%=l(:label_quadrant)%></th>
+              <th><%=l(:label_strategy)%></th>
+              <th><%=l(:label_count)%></th>
+              <th><%=l(:label_ids)%></th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong><%=l(:label_quadrant_high_power_high_interest)%></strong></td>
+              <td><%=l(:label_key_players)%></td>
+              <td id="q1_count">0</td>
+              <td id="q1_ids" style="color: #dc3545; text-align: center; font-weight: bold;">-</td>
+            </tr>
+            <tr>
+              <td><strong><%=l(:label_quadrant_high_power_low_interest)%></strong></td>
+              <td><%=l(:label_keep_satisfied)%></td>
+              <td id="q2_count">0</td>
+              <td id="q2_ids" style="color: #ffc107; text-align: center; font-weight: bold;">-</td>
+            </tr>
+            <tr>
+              <td><strong><%=l(:label_quadrant_low_power_high_interest)%></strong></td>
+              <td><%=l(:label_keep_informed)%></td>
+              <td id="q3_count">0</td>
+              <td id="q3_ids" style="color: #17a2b8; text-align: center; font-weight: bold;">-</td>
+            </tr>
+            <tr>
+              <td><strong><%=l(:label_quadrant_low_power_low_interest)%></strong></td>
+              <td><%=l(:label_minimal_effort)%></td>
+              <td id="q4_count">0</td>
+              <td id="q4_ids" style="color: #6c757d; text-align: center; font-weight: bold;">-</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Right Column: Participation Degree Distribution -->
+    <div class="box analytics-chart" style="flex: 1;">
+      <h3><%=l(:label_participation_degree_distribution)%></h3>
+      <div class="chart-container" style="height: 400px;">
+        <canvas id="participationDegreeChart" width="400" height="400"></canvas>
+      </div>
+      <div class="chart-legend" style="margin-top: 15px;">
+        <table class="list" style="font-size: 12px;">
+          <thead>
+            <tr>
+              <th><%=l(:field_participation_degree)%></th>
+              <th><%=l(:label_count)%></th>
+              <th><%=l(:label_percentage)%></th>
+              <th><%=l(:label_ids)%></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% participation_colors = ['#dc3545', '#ffc107', '#6c757d', '#17a2b8', '#28a745'] %>
+            <% @participation_degree_data.each_with_index do |data, idx| %>
+              <% next if data[:value] == 0 %>
+              <tr>
+                <td><%= data[:label] %></td>
+                <td><%= data[:value] %></td>
+                <td><%= number_to_percentage((data[:value].to_f / @total_count * 100), precision: 1) %></td>
+                <td id="pd<%= idx %>_ids" style="color: <%= participation_colors[idx] %>; text-align: center; font-weight: bold;">
+                  -
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
-  <!-- Location Type Chart -->
+  <!-- Location Type Distribution (Full Width) -->
   <div class="box analytics-chart">
     <h3><%=l(:label_location_type_distribution)%></h3>
-    <div class="chart-container">
+    <div class="chart-container" style="height: 300px;">
       <canvas id="locationTypeChart" width="400" height="300"></canvas>
     </div>
     <div class="chart-legend">
@@ -96,10 +150,358 @@
 
 <%= javascript_tag do %>
   document.addEventListener('DOMContentLoaded', function() {
-    // Influence/Attitude Chart Data
-    var influenceAttitudeData = <%= raw @influence_attitude_data.to_json %>;
-    var influenceAttitudeLabels = influenceAttitudeData.map(function(d) { return d.label; });
-    var influenceAttitudeValues = influenceAttitudeData.map(function(d) { return d.value; });
+    // Get stakeholder data for power-interest matrix
+    var stakeholders = <%= raw @stakeholders.map { |s| { id: s.id, power: s.power, interest: s.interest, name: s.name } }.to_json %>;
+
+    // Classify stakeholders into quadrants
+    // X軸: interest(關切), Y軸: power(權力)
+    // Q1 (右上): 高權力 + 高關切 = 密切管理
+    // Q2 (左上): 高權力 + 低關切 = 保持滿意
+    // Q3 (右下): 低權力 + 高關切 = 保持消息靈通
+    // Q4 (左下): 低權力 + 低關切 = 監視者
+    var q1 = [], q2 = [], q3 = [], q4 = [];
+
+    stakeholders.forEach(function(s) {
+      if (!s.power || !s.interest) return; // Skip if power or interest not set
+
+      if (s.power > 3 && s.interest > 3) {
+        q1.push(s);  // 右上: 高權力+高關切
+      } else if (s.power > 3 && s.interest <= 3) {
+        q2.push(s);  // 左上: 高權力+低關切
+      } else if (s.power <= 3 && s.interest > 3) {
+        q3.push(s);  // 右下: 低權力+高關切
+      } else {
+        q4.push(s);  // 左下: 低權力+低關切
+      }
+    });
+
+    // Update quadrant counts and IDs
+    document.getElementById('q1_count').textContent = q1.length;
+    document.getElementById('q2_count').textContent = q2.length;
+    document.getElementById('q3_count').textContent = q3.length;
+    document.getElementById('q4_count').textContent = q4.length;
+
+    // Display stakeholder IDs for each quadrant
+    document.getElementById('q1_ids').textContent = q1.length > 0 ? q1.map(s => s.id).join(', ') : '-';
+    document.getElementById('q2_ids').textContent = q2.length > 0 ? q2.map(s => s.id).join(', ') : '-';
+    document.getElementById('q3_ids').textContent = q3.length > 0 ? q3.map(s => s.id).join(', ') : '-';
+    document.getElementById('q4_ids').textContent = q4.length > 0 ? q4.map(s => s.id).join(', ') : '-';
+
+    // Initialize Power-Interest Matrix (Scatter Plot) with custom plugins
+    if (document.getElementById('powerInterestMatrix') && stakeholders.length > 0) {
+      var ctx_matrix = document.getElementById('powerInterestMatrix').getContext('2d');
+
+      // Function to apply small offsets to data points with identical coordinates
+      // This ensures different original pixels even for stakeholders with same power/interest
+      function applyDataLevelOffset(quadrantData) {
+        var coordMap = {};  // Map to track coordinates and their indices
+
+        quadrantData.forEach(function(s, idx) {
+          var coordKey = s.interest + ',' + s.power;  // Create a key for this coordinate
+
+          if (!coordMap[coordKey]) {
+            coordMap[coordKey] = [];
+          }
+          coordMap[coordKey].push(idx);
+        });
+
+        // Apply offsets to points with duplicate coordinates
+        var offsetData = quadrantData.map(function(s, idx) {
+          var coordKey = s.interest + ',' + s.power;
+          var duplicateIndices = coordMap[coordKey];
+
+          // Only apply offset if there are duplicates
+          if (duplicateIndices.length > 1) {
+            var positionInDuplicates = duplicateIndices.indexOf(idx);
+            var totalDuplicates = duplicateIndices.length;
+
+            // Create small circular offset based on position in duplicate group
+            // Each point gets a small offset (0.15 units on scale, which is ~2-3 pixels)
+            var angle = (2 * Math.PI * positionInDuplicates) / totalDuplicates;  // Distribute around circle
+            var offsetMagnitude = 0.15;  // Small offset on the scale (0-5)
+
+            return {
+              x: s.interest + offsetMagnitude * Math.cos(angle),
+              y: s.power + offsetMagnitude * Math.sin(angle),
+              id: s.id,
+              name: s.name,
+              originalX: s.interest,  // Store original for reference
+              originalY: s.power
+            };
+          }
+
+          return {
+            x: s.interest,
+            y: s.power,
+            id: s.id,
+            name: s.name,
+            originalX: s.interest,
+            originalY: s.power
+          };
+        });
+
+        return offsetData;
+      }
+
+      // Prepare data for each quadrant (including ID for labels and name for tooltip)
+      // Apply data-level offset to handle duplicate coordinates
+      var dataQ1 = applyDataLevelOffset(q1);
+      var dataQ2 = applyDataLevelOffset(q2);
+      var dataQ3 = applyDataLevelOffset(q3);
+      var dataQ4 = applyDataLevelOffset(q4);
+
+      // Custom plugin to draw center lines and quadrant labels
+      var centerLinePlugin = {
+        id: 'centerLine',
+        afterDatasetsDraw(chart) {
+          const ctx = chart.ctx;
+          const xScale = chart.scales.x;
+          const yScale = chart.scales.y;
+
+          // Get pixel positions for center (3 on both scales)
+          const centerX = xScale.getPixelForValue(3);
+          const centerY = yScale.getPixelForValue(3);
+          const chartArea = chart.chartArea;
+
+          // Draw vertical center line
+          ctx.save();
+          ctx.strokeStyle = '#999';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(centerX, chartArea.top);
+          ctx.lineTo(centerX, chartArea.bottom);
+          ctx.stroke();
+
+          // Draw horizontal center line
+          ctx.beginPath();
+          ctx.moveTo(chartArea.left, centerY);
+          ctx.lineTo(chartArea.right, centerY);
+          ctx.stroke();
+          ctx.restore();
+
+          // Draw quadrant labels with background
+          // X軸: 關切 (左低右高), Y軸: 權力 (下低上高)
+          // Q1 (右上): 高權力+高關切 = 密切管理 (紅)
+          // Q2 (左上): 高權力+低關切 = 保持滿意 (黃)
+          // Q3 (右下): 低權力+高關切 = 保持消息靈通 (藍)
+          // Q4 (左下): 低權力+低關切 = 監視者 (灰)
+          var quadrants = [
+            { name: '<%=l(:label_key_players)%>', x: (chartArea.right + centerX) / 2, y: (chartArea.top + centerY) / 2, bg: '#ffe6e6' },      // Q1: 右上
+            { name: '<%=l(:label_keep_satisfied)%>', x: (chartArea.left + centerX) / 2, y: (chartArea.top + centerY) / 2, bg: '#fff4e6' },    // Q2: 左上
+            { name: '<%=l(:label_keep_informed)%>', x: (chartArea.right + centerX) / 2, y: (chartArea.bottom + centerY) / 2, bg: '#e6f3ff' }, // Q3: 右下
+            { name: '<%=l(:label_minimal_effort)%>', x: (chartArea.left + centerX) / 2, y: (chartArea.bottom + centerY) / 2, bg: '#f0f0f0' }   // Q4: 左下
+          ];
+
+          ctx.save();
+          ctx.font = 'bold 12px Arial, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+
+          quadrants.forEach(function(q) {
+            // Draw background rectangle
+            const textWidth = ctx.measureText(q.name).width + 10;
+            const textHeight = 18;
+            ctx.fillStyle = q.bg;
+            ctx.globalAlpha = 0.8;
+            ctx.fillRect(q.x - textWidth/2, q.y - textHeight/2, textWidth, textHeight);
+
+            // Draw text
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = '#333';
+            ctx.fillText(q.name, q.x, q.y);
+          });
+          ctx.restore();
+        }
+      };
+
+      // Plugin placeholder (previously used for collision avoidance, now simplified)
+      var collisionAvoidancePlugin = {
+        id: 'collisionAvoidance',
+        // No longer needed since we're only displaying text without circles
+        afterScalesUpdate(chart) {
+          // Placeholder - collision avoidance for circles is no longer needed
+        }
+      };
+
+      // Plugin to draw ID text inside circles
+      // Uses Chart.js built-in circles with text overlay
+      var pointLabelPlugin = {
+        id: 'pointLabel',
+        afterDatasetsDraw(chart) {
+          const ctx = chart.ctx;
+          const xScale = chart.scales.x;
+          const yScale = chart.scales.y;
+
+          // Draw ID text inside each point's circle
+          chart.data.datasets.forEach(function(dataset, datasetIndex) {
+            if (!dataset.data || dataset.data.length === 0) return;
+
+            dataset.data.forEach(function(point, pointIndex) {
+              if (!point.id) return;
+
+              const pixelX = xScale.getPixelForValue(point.x);
+              const pixelY = yScale.getPixelForValue(point.y);
+
+              // Draw text (ID) centered in circle
+              ctx.save();
+              ctx.font = 'bold 14px Arial, sans-serif';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillStyle = '#fff';  // White text for contrast
+              ctx.fillText(point.id, pixelX, pixelY);
+              ctx.restore();
+            });
+          });
+        }
+      };
+
+      var chartInstance_matrix = new Chart(ctx_matrix, {
+        type: 'scatter',
+        data: {
+          datasets: [
+            {
+              label: '<%=l(:label_key_players)%>',
+              data: dataQ1,
+              backgroundColor: '#dc3545',  // 紅 - Q1: 高權力+高關切
+              borderColor: '#c82333',
+              borderWidth: 2,
+              radius: 6  // Show circles with built-in rendering
+            },
+            {
+              label: '<%=l(:label_keep_satisfied)%>',
+              data: dataQ2,
+              backgroundColor: '#ffc107',  // 黃 - Q2: 高權力+低關切
+              borderColor: '#e0a800',
+              borderWidth: 2,
+              radius: 6  // Show circles with built-in rendering
+            },
+            {
+              label: '<%=l(:label_keep_informed)%>',
+              data: dataQ3,
+              backgroundColor: '#17a2b8',  // 藍 - Q3: 低權力+高關切
+              borderColor: '#117a8b',
+              borderWidth: 2,
+              radius: 6  // Show circles with built-in rendering
+            },
+            {
+              label: '<%=l(:label_minimal_effort)%>',
+              data: dataQ4,
+              backgroundColor: '#6c757d',  // 灰 - Q4: 低權力+低關切
+              borderColor: '#545b62',
+              borderWidth: 2,
+              radius: 6  // Show circles with built-in rendering
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              type: 'linear',
+              position: 'bottom',
+              min: 0.5,
+              max: 5.5,
+              grid: {
+                display: false  // 隱藏所有網格線
+              },
+              ticks: {
+                stepSize: 1,
+                callback: function(value) {
+                  var labels = ['', '1', '2', '3', '4', '5'];
+                  return labels[value] || '';
+                }
+              },
+              title: {
+                display: true,
+                text: '<%=l(:field_interest)%> →'
+              }
+            },
+            y: {
+              min: 0.5,
+              max: 5.5,
+              grid: {
+                display: false  // 隱藏所有網格線
+              },
+              ticks: {
+                stepSize: 1,
+                callback: function(value) {
+                  var labels = ['', '1', '2', '3', '4', '5'];
+                  return labels[value] || '';
+                }
+              },
+              title: {
+                display: true,
+                text: '<%=l(:field_power)%> →'
+              }
+            }
+          },
+          plugins: {
+            centerLine: {},  // 啟用自定義外掛
+            legend: {
+              display: true,
+              position: 'bottom'
+            },
+            tooltip: {
+              enabled: true,
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              titleColor: '#fff',
+              bodyColor: '#fff',
+              padding: 10,
+              displayColors: false,
+              callbacks: {
+                title: function(context) {
+                  var point = context[0].raw;
+                  return point.name || '<%=l(:label_unnamed)%>';
+                },
+                label: function(context) {
+                  var point = context.raw;
+                  return 'ID: ' + point.id + '\n<%=l(:field_power)%>: ' + point.y + '\n<%=l(:field_interest)%>: ' + point.x;
+                }
+              }
+            }
+          }
+        },
+        plugins: [collisionAvoidancePlugin, centerLinePlugin, pointLabelPlugin]  // 註冊自定義外掛
+      });
+
+      // Debug: Analyze chart data structure after initialization
+      console.log('=== Chart Initialization Debug ===');
+      console.log('Chart type:', 'scatter');
+      console.log('Number of datasets:', chartInstance_matrix.data.datasets.length);
+
+      chartInstance_matrix.data.datasets.forEach(function(dataset, idx) {
+        console.log(`\nDataset ${idx}:`);
+        console.log('  Label:', dataset.label);
+        console.log('  Number of points:', dataset.data.length);
+        console.log('  Colors - BG:', dataset.backgroundColor, 'Border:', dataset.borderColor, 'Radius:', dataset.radius);
+
+        dataset.data.forEach(function(point, pIdx) {
+          console.log(`    Point ${pIdx}: id=${point.id}, x=${point.x}, y=${point.y}`);
+        });
+      });
+
+      // Check if circles are drawn per dataset or together
+      console.log('\n=== Circle Drawing Analysis ===');
+      console.log('Question 1: 圓圈根據編號分開畫還是一起畫?');
+      console.log('Answer: 根據以上日誌可以看出，有', chartInstance_matrix.data.datasets.length, '個 dataset，每個 dataset 有自己的顏色');
+      console.log('Chart.js 會根據 dataset 分別繪製圓圈');
+      console.log('\nQuestion 2: 如果分開畫，座標是不是能分開?');
+      console.log('Answer: 是的，每個 point 都有自己的座標 (x, y)，可以分開繪製');
+    }
+
+    // Participation Degree Chart Data
+    var participationDegreeData = <%= raw @participation_degree_data.to_json %>;
+    var participationDegreeLabels = participationDegreeData.map(function(d) { return d.label; });
+    var participationDegreeValues = participationDegreeData.map(function(d) { return d.value; });
+
+    // Display participation degree IDs in table
+    participationDegreeData.forEach(function(data, idx) {
+      var idElement = document.getElementById('pd' + idx + '_ids');
+      if (idElement && data.ids) {
+        idElement.textContent = data.ids.length > 0 ? data.ids.join(', ') : '-';
+      }
+    });
 
     // Location Type Chart Data
     var locationTypeData = <%= raw @location_type_stats.reject { |k, v| k.blank? }.to_json %>;
@@ -108,8 +510,8 @@
     });
     var locationTypeValues = Object.values(locationTypeData);
 
-    // Color palette for influence/attitude
-    var influenceColors = [
+    // Color palette for participation degree
+    var participationColors = [
       '#dc3545', // red - completely unaware
       '#ffc107', // yellow - resistant
       '#6c757d', // gray - neutral
@@ -117,16 +519,16 @@
       '#28a745'  // green - leading
     ];
 
-    // Initialize Influence/Attitude Chart (Pie Chart)
-    if (document.getElementById('influenceAttitudeChart')) {
-      var ctx1 = document.getElementById('influenceAttitudeChart').getContext('2d');
+    // Initialize Participation Degree Chart (Pie Chart)
+    if (document.getElementById('participationDegreeChart')) {
+      var ctx1 = document.getElementById('participationDegreeChart').getContext('2d');
       new Chart(ctx1, {
         type: 'pie',
         data: {
-          labels: influenceAttitudeLabels,
+          labels: participationDegreeLabels,
           datasets: [{
-            data: influenceAttitudeValues,
-            backgroundColor: influenceColors,
+            data: participationDegreeValues,
+            backgroundColor: participationColors,
             borderWidth: 2,
             borderColor: '#fff'
           }]
@@ -180,3 +582,38 @@
     }
   });
 <% end %>
+
+<style>
+  .analytics-container {
+    padding: 10px 0;
+  }
+
+  .box.analytics-chart {
+    margin-bottom: 20px;
+  }
+
+  .chart-container {
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .chart-legend {
+    margin-top: 10px;
+  }
+
+  .matrix-legend table {
+    width: 100%;
+  }
+
+  .matrix-legend td {
+    padding: 5px;
+    text-align: left;
+  }
+
+  /* 響應式設計: 在小螢幕上改為單欄 */
+  @media (max-width: 1200px) {
+    div[style*="display: flex"] {
+      flex-direction: column !important;
+    }
+  }
+</style>

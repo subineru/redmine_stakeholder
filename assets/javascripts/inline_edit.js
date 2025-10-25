@@ -157,7 +157,16 @@
     .then(data => {
       if (data.success) {
         const valueSpan = cell.querySelector('.editable-value');
-        valueSpan.innerHTML = data.formatted_value || newValue;
+        // Security: Use textContent instead of innerHTML to prevent XSS
+        valueSpan.textContent = data.formatted_value || newValue;
+
+        // Update data-value attribute for select fields (power, interest, participation_degree, location_type)
+        // This ensures the actual value is stored for next edit
+        const fieldType = cell.dataset.type;
+        if (fieldType === 'select') {
+          valueSpan.dataset.value = newValue;
+        }
+
         finishEditing(cell, input, actionsDiv, true);
 
         // Show success feedback

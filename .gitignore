@@ -1,8 +1,8 @@
 # Project-specific files (不要提交到版本控制)
 CLAUDE.md
 todolist.md
-pic/
-pic/**/*
+error/
+error/**/*
 
 # Log files
 *.log

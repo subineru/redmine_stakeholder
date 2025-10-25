@@ -17,15 +17,27 @@
     <%= f.text_field :project_role, size: 60, label: l(:field_project_role) %>
   </p>
   <p>
+    <%= f.select :power,
+                 Stakeholder.power_options,
+                 { include_blank: l(:label_select_power) },
+                 { class: 'power-select' } %>
+  </p>
+  <p>
+    <%= f.select :interest,
+                 Stakeholder.interest_options,
+                 { include_blank: l(:label_select_interest) },
+                 { class: 'interest-select' } %>
+  </p>
+  <p>
     <%= f.text_area :primary_needs, rows: 5, class: 'wiki-edit', label: l(:field_primary_needs) %>
   </p>
   <p>
     <%= f.text_area :expectations, rows: 5, class: 'wiki-edit', label: l(:field_expectations) %>
   </p>
   <p>
-    <%= f.select :influence_attitude,
-                 Stakeholder.influence_attitude_options,
-                 { include_blank: l(:label_select_influence_attitude) },
-                 { class: 'influence-attitude-select' } %>
+    <%= f.select :participation_degree,
+                 Stakeholder.participation_degree_options,
+                 { include_blank: l(:label_select_participation_degree) },
+                 { class: 'participation-degree-select' } %>
   </p>
 </div>

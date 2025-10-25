@@ -21,8 +21,16 @@ module RedmineStakeholder
         end
       end
 
-      # Load Chart.js from CDN
-      output << "<script src=\"https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js\"></script>\n"
+      # Load Chart.js from local vendor directory (避免 CDN SRI 問題)
+      chart_js_path = File.join(plugin_dir, 'vendor', 'javascript', 'chart.umd.min.js')
+      if File.exist?(chart_js_path)
+        # 本地載入
+        content = File.read(chart_js_path)
+        output << "<script type=\"text/javascript\">\n#{content}\n</script>\n"
+      else
+        # 備用: 如果本地檔案不存在，使用 CDN（無 SRI）
+        output << "<script src=\"https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js\"></script>\n"
+      end
 
       # Load inline_edit script
       path = File.join(plugin_dir, 'assets', 'javascripts', 'inline_edit.js')

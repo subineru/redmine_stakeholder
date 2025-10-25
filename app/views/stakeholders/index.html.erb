@@ -25,16 +25,18 @@
           <th><%= l(:field_title) %></th>
           <th><%= l(:field_location_type) %></th>
           <th><%= l(:field_project_role) %></th>
+          <th><%= l(:field_power) %></th>
+          <th><%= l(:field_interest) %></th>
           <th><%= l(:field_primary_needs) %></th>
           <th><%= l(:field_expectations) %></th>
-          <th><%= l(:field_influence_attitude) %></th>
+          <th><%= l(:field_participation_degree) %></th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <% @stakeholders.each do |stakeholder| %>
           <tr class="stakeholder <%= cycle('odd', 'even') %>" data-stakeholder-id="<%= stakeholder.id %>">
-            <td class="id"><%= stakeholder.id %></td>
+            <td class="id" title="Global ID: <%= stakeholder.id %>"><%= stakeholder.project_sequence_number %></td>
             <td class="name editable"
                 data-field="name"
                 data-type="text"
@@ -72,6 +74,26 @@
                 <i class="icon icon-edit editable-icon"></i>
               <% end %>
             </td>
+            <td class="power editable"
+                data-field="power"
+                data-type="select"
+                data-options="<%= Stakeholder.power_options.to_json %>"
+                data-url="<%= inline_update_project_stakeholder_path(@project, stakeholder) %>">
+              <span class="editable-value" data-value="<%= stakeholder.power %>"><%= stakeholder.power_label %></span>
+              <% if User.current.allowed_to?(:manage_stakeholders, @project) %>
+                <i class="icon icon-edit editable-icon"></i>
+              <% end %>
+            </td>
+            <td class="interest editable"
+                data-field="interest"
+                data-type="select"
+                data-options="<%= Stakeholder.interest_options.to_json %>"
+                data-url="<%= inline_update_project_stakeholder_path(@project, stakeholder) %>">
+              <span class="editable-value" data-value="<%= stakeholder.interest %>"><%= stakeholder.interest_label %></span>
+              <% if User.current.allowed_to?(:manage_stakeholders, @project) %>
+                <i class="icon icon-edit editable-icon"></i>
+              <% end %>
+            </td>
             <td class="primary-needs editable"
                 data-field="primary_needs"
                 data-type="textarea"
@@ -90,12 +112,12 @@
                 <i class="icon icon-edit editable-icon"></i>
               <% end %>
             </td>
-            <td class="influence-attitude editable"
-                data-field="influence_attitude"
+            <td class="participation-degree editable"
+                data-field="participation_degree"
                 data-type="select"
-                data-options="<%= Stakeholder.influence_attitude_options.to_json %>"
+                data-options="<%= Stakeholder.participation_degree_options.to_json %>"
                 data-url="<%= inline_update_project_stakeholder_path(@project, stakeholder) %>">
-              <span class="editable-value" data-value="<%= stakeholder.influence_attitude %>"><%= stakeholder.influence_attitude_label %></span>
+              <span class="editable-value" data-value="<%= stakeholder.participation_degree %>"><%= stakeholder.participation_degree_label %></span>
               <% if User.current.allowed_to?(:manage_stakeholders, @project) %>
                 <i class="icon icon-edit editable-icon"></i>
               <% end %>

@@ -12,36 +12,52 @@
               class: 'icon icon-del' if User.current.allowed_to?(:manage_stakeholders, @project) %>
 </div>
 
-<h2><%=l(:label_stakeholder)%>: <%= @stakeholder.name %></h2>
+<h2><%=l(:label_stakeholder)%>: <%= h(@stakeholder.name) %></h2>
 
 <div class="stakeholder-details">
   <div class="splitcontentleft">
     <p>
       <strong><%=l(:field_id)%>:</strong>
-      <%= @stakeholder.id %>
+      <span title="Global ID: <%= @stakeholder.id %>"><%= @stakeholder.project_sequence_number %></span>
     </p>
     <p>
       <strong><%=l(:field_stakeholder_name)%>:</strong>
-      <%= @stakeholder.name %>
+      <%= h(@stakeholder.name) %>
     </p>
     <p>
-      <strong><%=l(:field_impact_phase)%>:</strong>
-      <%= @stakeholder.impact_phase %>
+      <strong><%=l(:field_title)%>:</strong>
+      <%= h(@stakeholder.title) %>
     </p>
     <p>
-      <strong><%=l(:field_support_level)%>:</strong>
-      <%= support_level_badge(@stakeholder.support_level) %>
+      <strong><%=l(:field_location_type)%>:</strong>
+      <%= @stakeholder.location_type_label %>
+    </p>
+    <p>
+      <strong><%=l(:field_project_role)%>:</strong>
+      <%= h(@stakeholder.project_role) %>
+    </p>
+    <p>
+      <strong><%=l(:field_power)%>:</strong>
+      <%= @stakeholder.power_label %>
+    </p>
+    <p>
+      <strong><%=l(:field_interest)%>:</strong>
+      <%= @stakeholder.interest_label %>
     </p>
   </div>
 
   <div class="splitcontentright">
     <p>
-      <strong><%=l(:field_requirements)%>:</strong>
-      <%= simple_format(@stakeholder.requirements) %>
+      <strong><%=l(:field_primary_needs)%>:</strong>
+      <%= simple_format(h(@stakeholder.primary_needs)) %>
     </p>
     <p>
       <strong><%=l(:field_expectations)%>:</strong>
-      <%= simple_format(@stakeholder.expectations) %>
+      <%= simple_format(h(@stakeholder.expectations)) %>
+    </p>
+    <p>
+      <strong><%=l(:field_participation_degree)%>:</strong>
+      <%= @stakeholder.participation_degree_label %>
     </p>
   </div>
 </div>
