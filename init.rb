@@ -8,7 +8,7 @@ Redmine::Plugin.register :redmine_stakeholder do
   name 'Redmine Stakeholder Plugin'
   author 'Subi Hung'
   description 'A plugin for managing project stakeholders in Redmine'
-  version '0.1.0'
+  version '1.0.1'
   url 'https://github.com/yourusername/redmine_stakeholder'
   author_url 'https://github.com/yourusername'
 
