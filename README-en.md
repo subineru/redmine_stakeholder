@@ -48,13 +48,9 @@ A comprehensive Redmine plugin for managing and analyzing project stakeholders w
 ### System Screenshots
 
 #### Stakeholder List
-![Stakeholder Icon](image/icon-stakeholder.svg)
-
 ![Stakeholder List](image/1.png)
 
 #### Change History Records
-![Change History Icon](image/icon-history.svg)
-
 ![Change History](image/2.png)
 
 ### Installation
