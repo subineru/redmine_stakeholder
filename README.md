@@ -48,13 +48,9 @@
 ### 系統畫面
 
 #### 利害關係人列表
-![Stakeholder Icon](image/icon-stakeholder.svg)
-
 ![Stakeholder List](image/1.png)
 
 #### 變更歷史記錄
-![Change History Icon](image/icon-history.svg)
-
 ![Change History](image/2.png)
 
 ### 安裝
